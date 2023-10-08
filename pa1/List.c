@@ -2,9 +2,12 @@
 #include <stdlib.h>
 #include "List.h"
 
+#define FORMAT "%d"
+
 typedef struct NodeObj* Node;
 
-typedef struct NodeObj{
+typedef struct NodeObj
+{
 	ListElement data;
 	Node next;
 	Node prev;
@@ -31,14 +34,14 @@ void freeList(List* pL)
 {
 	if(pL != NULL && *pL != NULL)
 	{
-		while(*pL->front != NULL)
+		while((*pL)->front != NULL)
 		{
-			Node temp = *pL->front;
-			*pL->front = *pL->front->next;
+			Node temp = (*pL)->front;
+			(*pL)->front = (*pL)->front->next;
 			free(temp);
 		}
-		free(*pL);
-		*pL = NULL;
+	free(*pL);
+	*pL = NULL;
 	}
 }
 
@@ -54,11 +57,11 @@ int index(List L)
 
 int front(List L)
 {
-	if(length(L) > 0)
+	if(length(L) > 0 && L->front != NULL)
 	{
 		return L->front->data;
 	}
-	
+
 	return -1;
 }
 
@@ -68,13 +71,13 @@ int back(List L)
 	{
 		return L->back->data;
 	}
-	
+
 	return -1;
 }
 
 int get(List L)
 {
-	if(length(L) > 0 && index(L) >= 0)
+	if(length(L) > 0 && index(L) >= 0 && L->cursor != NULL)
 	{
 		return L->cursor->data;
 	}
@@ -87,7 +90,7 @@ bool equals(List A, List B)
 	{
 		return false;
 	}
-	
+
 	Node tempA = A->front;
 	Node tempB = B->front;
 	while(tempA != NULL && tempB != NULL)
@@ -100,14 +103,27 @@ bool equals(List A, List B)
 		tempB = tempB->next;
 	}
 	return true;
-	
+
 }
 
-void clear(List L);
+void clear(List L)
+{
+    if (L == NULL)
+    {
+        fprintf(stderr, "Error: Attempted to clear a NULL list.\n");
+        exit(1);
+    }
+
+    // Free all nodes in the list
+    while (length(L) > 0)
+    {
+        deleteFront(L);
+    }
+}
 
 void set(List L, int x)
 {
-	if(length(L) > 0 && index >= 0)
+	if(length(L) > 0 && index(L) >= 0)
 	{
 		L->cursor->data = x;
 	}
@@ -115,11 +131,11 @@ void set(List L, int x)
 
 void moveFront(List L)
 {
-	 if(length(L) > 0)
-	 {
-	 	L->cursor = L->front;
-	 	L->cursor_index = 0;
-	 }
+	if(length(L) > 0)
+	{
+		L->cursor = L->front;
+		L->cursor_index = 0;
+	}
 }
 
 void moveBack(List L)
@@ -141,12 +157,13 @@ void movePrev(List L)
 			L->cursor = L->cursor->prev;
 			L->cursor_index--;
 		}
-		else{
+		else
+		{
 			L->cursor = NULL;
 			L->cursor_index = -1;
 		}
 	}
-	
+
 }
 
 void moveNext(List L)
@@ -158,7 +175,8 @@ void moveNext(List L)
 			L->cursor = L->cursor->next;
 			L->cursor_index++;
 		}
-		else{
+		else
+		{
 			L->cursor = NULL;
 			L->cursor_index = -1;
 		}
@@ -194,61 +212,75 @@ void append(List L, int x)
 
 	if(length(L) == 0)
 	{
-		L->back = newNode;
+		L->front = L->back = newNode;
 	}
 	else
 	{
 		L->back->next = newNode;
+		L->back = newNode;
 	}
-
-	L->back = newNode;
 	L->length++;
 }
 
 void insertBefore(List L, int x)
 {
-	if(length(L) > 0 && index(L) >= 0)
-	{
-		Node newNode = malloc(sizeof(NodeObj));
-		newNode->data = x;
-		newNode->prev = L->cursor->prev;
-		newNode->next = L->cursor;
-		L->cursor->prev = newnode;
-		L->length++;
-		L->cursor_index++;
-	
-		if(L->cursor->prev != NULL)
-		{
-			L->cursor->prev->next = newNode;
-		}
-		else{
-			L->front = newNode;
-		}
+    if (length(L) > 0 && index(L) >= 0)
+    {
+        Node newNode = malloc(sizeof(NodeObj));
+        if (newNode == NULL)
+        {
+            fprintf(stderr, "Error: Failed to allocate memory for new node.\n");
+            exit(1);
+        }
 
-		
+        newNode->data = x;
 
-	}
+        if (L->cursor->prev != NULL)
+        {
+            newNode->prev = L->cursor->prev;
+            L->cursor->prev->next = newNode;
+        }
+        else
+        {
+            newNode->prev = NULL;
+            L->front = newNode;
+        }
+
+        newNode->next = L->cursor;
+        L->cursor->prev = newNode;
+
+        L->length++;
+        L->cursor_index++;
+    }
 }
 
 void insertAfter(List L, int x)
 {
-	if(length(L) > 0 && index(L) >= 0)
-	{
-		Node newNode = malloc(sizeof(NodeObj));
-		newNode->data = x;
-		newNode->prev = L->cursor;
-		newNode->next = L->cursor->next;
-		L->cursor->next = newnode;
-		L->length++;
-	
-		if(L->cursor->next != NULL)
-		{
-			L->cursor->next->prev = newNode;
-		}
-		else{
-			L->back = newNode;
-		}
-	}
+    if (length(L) > 0 && index(L) >= 0)
+    {
+        Node newNode = malloc(sizeof(NodeObj));
+        if (newNode == NULL)
+        {
+            fprintf(stderr, "Error: Failed to allocate memory for new node.\n");
+            exit(1);
+        }
+        newNode->data = x;
+
+        newNode->next = L->cursor->next;
+        newNode->prev = L->cursor;
+        L->cursor->next = newNode;
+
+        if (newNode->next != NULL)
+        {
+            newNode->next->prev = newNode;
+        }
+        else
+        {
+            L->back = newNode;
+        }
+
+        L->length++;
+    }
 }
 
 void deleteFront(List L)
@@ -275,76 +307,117 @@ void deleteFront(List L)
 
 		free(temp);
 		L->length--;
+		L->cursor_index--;
 	}
 }
 
 void deleteBack(List L)
 {
-	if(length(L) > 0)
-	{
-		Node temp = L->back;
+    if (length(L) > 0)
+    {
+        if (L->cursor == L->back)
+        {
+            L->cursor = L->cursor->prev;
+            L->cursor_index--;
+        }
 
-		if(L->back == L->cursor)
-		{
-			L->cursor = NULL;
-			L->cursor_index = -1;
-		}
+        Node temp = L->back;
 
-		L->back = L->back->prev;
+        if (L->length == 1)
+        {
+            L->front = NULL;
+            L->back = NULL;
+        }
+        else
+        {
+            if (L->back == L->cursor)
+            {
+                L->cursor = L->cursor->prev;
+                L->cursor_index--;
+            }
 
-		if(L->back != NULL)
-		{
-			L->back->next = NULL;
-		}
-		else{
-			L->front = NULL;
-		}
+            L->back = L->back->prev;
+            L->back->next = NULL;
+        }
 
-		free(temp);
-		L->length--;
-	}
+        free(temp);
+        L->length--;
+    }
 }
 
-void delete(List L)
+void delete(List L) {
+    if (length(L) > 0 && index(L) >= 0) {
+        Node temp = L->cursor;
+
+        if (L->cursor == L->front) {
+            L->front = L->front->next;
+            if (L->front != NULL) {
+                L->front->prev = NULL;
+            } else {
+                L->back = NULL;
+            }
+        } else if (L->cursor == L->back) {
+            L->back = L->back->prev;
+            if (L->back != NULL) {
+                L->back->next = NULL;
+            } else {
+                L->front = NULL;
+            }
+        } else {
+            L->cursor->prev->next = L->cursor->next;
+            L->cursor->next->prev = L->cursor->prev;
+        }
+
+        L->cursor = NULL;
+        L->cursor_index = -1;
+        L->length--;
+
+        free(temp); // Free temp within the scope where it's declared.
+    }
+}
+
+void printList(FILE* out, List L)
 {
-	if(length(L) > - && index(L) >= 0)
-	{
-		Node temp = L->cursor;
-	}
-	if(L->cursor == L->front)
-	{
-		L->front = L->front->next;
-		if(L->front != NULL)
-		{
-			L->front->prev = NULL;
-		}
-		else{
-			L->back = NULL;
-		}
-	}
-	else if(L->cursor == L->back)
-	{
-		L->back = L->back->prev;
-		if(L->back != NULL)
-		{
-			L->back->next = NULL;
-		}
-		else
-		{
-			L->front = NULL;
-		}
-	}
-	else{
-		L->prev->next = L->cursor->next;
-		L->cursor->next->prev = L->cursor->prev;
-	}
+    if (L == NULL || out == NULL)
+    {
+        fprintf(stderr, "Error: NULL List or output file.\n");
+        return;
+    }
+    
+    Node current = L->front;
 
-	free(temp);
-	L->cursor = NULL;
-	L->cursor_index = -1;
-	L->length--;
+    while (current != NULL)
+    {
+        fprintf(out, FORMAT, current->data);
+
+        if (current->next != NULL)
+        {
+            fprintf(out, " ");
+        }
+
+        current = current->next;
+    }
+
+    fprintf(out, "\n");
 }
 
-void printList(FILE* out, List L);
+List copyList(List L)
+{
+    if (L == NULL)
+    {
+        fprintf(stderr, "Error: Attempted to copy a NULL list.\n");
+        exit(1);
+    }
 
-List copyList(List L);
+    List copiedList = newList(); // Create a new list
+
+    Node current = L->front; // Start from the front of the original list
+
+    while (current != NULL)
+    {
+        append(copiedList, current->data); // Append each element to the new list
+        current = current->next;
+    }
+
+    return copiedList;
+}
