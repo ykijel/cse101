@@ -4,7 +4,7 @@
 
 #define FORMAT "%s"
 
-typedef char* ListElement;
+typedef int* ListElement;
 typedef struct ListObj* List;
 
 List newList(void);
@@ -54,3 +54,5 @@ void printList(FILE* out, List L);
 List copyList(List L);
 
 //List concatList(List A, List B);
+
+#endif
