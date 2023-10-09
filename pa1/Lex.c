@@ -123,7 +123,7 @@ int main(int argc, char *argv[]) {
         free(test[i]);
     }
     free(test);
-
+    freeList(&myList);
     // close files
     fclose(in);
     fclose(out);
