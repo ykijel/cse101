@@ -398,7 +398,7 @@ void printList(FILE* out, List L)
         current = current->next;
     }
 
-    fprintf(out, "\n");
+    fprintf(out, "");
 }
 
 List copyList(List L)
@@ -420,4 +420,24 @@ List copyList(List L)
     }
 
     return copiedList;
+}
+
+List concatList(List A, List B) {
+    List result = newList();
+
+    // Copy elements from List A to the result
+    Node currentA = A->front;
+    while (currentA != NULL) {
+        append(result, currentA->data);
+        currentA = currentA->next;
+    }
+
+    // Copy elements from List B to the result
+    Node currentB = B->front;
+    while (currentB != NULL) {
+        append(result, currentB->data);
+        currentB = currentB->next;
+    }
+
+    return result;
 }
