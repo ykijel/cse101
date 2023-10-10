@@ -201,6 +201,7 @@ void prepend(List L, int x)
 
 	L->front = newNode;
 	L->length++;
+    L->cursor_index++;
 }
 
 void append(List L, int x)
