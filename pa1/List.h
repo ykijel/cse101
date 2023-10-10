@@ -2,7 +2,7 @@
 // Yahli Kijel
 // ykijel
 // 2023 Fall CSE101 PA1
-// List.c
+// List.h
 // List ADT header file
 //-----------------------------------------------------------------------------
 #ifndef LIST_H
