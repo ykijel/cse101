@@ -53,6 +53,6 @@ void printList(FILE* out, List L);
 
 List copyList(List L);
 
-//List concatList(List A, List B);
+List concatList(List A, List B);
 
 #endif

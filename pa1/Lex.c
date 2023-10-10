@@ -14,6 +14,7 @@ int main(int argc, char *argv[]) {
     char **test;
     char tokenBuffer[MAX_LEN];
     char *token;
+    int newlines = 0;
     List myList = newList();
 
     // check command line for the correct number of arguments
@@ -65,7 +66,15 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "Memory allocation failed\n");
             exit(1);
         }
-        strcpy(test[line_count], line);
+        if(strlen(line) != 1)
+        {
+        	strcpy(test[line_count], line);
+        }
+        else
+        {
+        	newlines++;
+        }
+        
 
         // get tokens in this line
         token_count = 0;
@@ -94,6 +103,7 @@ int main(int argc, char *argv[]) {
             int inserted = 0;
 
             while (index(myList) >= 0) {
+            	
                 if (strcmp(line, test[get(myList)]) < 0) {
                     insertBefore(myList, line_count);
                     inserted = 1;
@@ -115,7 +125,15 @@ int main(int argc, char *argv[]) {
     for(int i = 0; i < length(myList); i++)
     {
     	fprintf(out, "%s", test[get(myList)]);
-    	moveNext(myList);
+    	moveNext(myList);	
+
+    }
+    if(newlines > 0)
+    {
+    	for(int i = 0; i < newlines; i++)
+    	{
+    		fprintf(out, "\n");
+    	}
     }
 
     // Free the dynamically allocated memory for test
@@ -124,6 +142,7 @@ int main(int argc, char *argv[]) {
     }
     free(test);
     freeList(&myList);
+
     // close files
     fclose(in);
     fclose(out);
