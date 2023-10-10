@@ -287,7 +287,7 @@ void deleteFront(List L)
 {
 	if(length(L) > 0)
 	{
-		Node temp = L->front;
+
 
 		if(L->front == L->cursor)
 		{
@@ -305,9 +305,12 @@ void deleteFront(List L)
 			L->back = NULL;
 		}
 
-		free(temp);
 		L->length--;
-		L->cursor_index--;
+		if(L->cursor_index != -1)
+		{
+			L->cursor_index--;
+		}
+		
 	}
 }
 
@@ -318,10 +321,8 @@ void deleteBack(List L)
         if (L->cursor == L->back)
         {
             L->cursor = L->cursor->prev;
-            L->cursor_index--;
+            L->cursor_index=-1;
         }
-
-        Node temp = L->back;
 
         if (L->length == 1)
         {
@@ -340,14 +341,12 @@ void deleteBack(List L)
             L->back->next = NULL;
         }
 
-        free(temp);
         L->length--;
     }
 }
 
 void delete(List L) {
     if (length(L) > 0 && index(L) >= 0) {
-        Node temp = L->cursor;
 
         if (L->cursor == L->front) {
             L->front = L->front->next;
@@ -372,7 +371,7 @@ void delete(List L) {
         L->cursor_index = -1;
         L->length--;
 
-        free(temp); // Free temp within the scope where it's declared.
+     
     }
 }
 
