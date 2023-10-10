@@ -15,5 +15,5 @@ Usage:
 make - makes Lex
 make ListTest - makes ListTest
 make clean - remove all binaries
-make checkClient - checks ListTest for memory errors
+make checkTest - checks ListTest for memory errors
 make checkLex - checks Lex for memory errors

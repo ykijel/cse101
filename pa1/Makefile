@@ -16,7 +16,7 @@ List.o : List.c List.h
 clean :
 	rm -f Lex ListTest Lex.o ListTest.o List.o
 
-checkClient : 
+checkTest : 
 	valgrind --leak-check=full ListTest
 
 checkLex :

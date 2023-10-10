@@ -8,6 +8,7 @@ int main(int argc, char* argv[]){
    List A = newList();
    List B = newList();
    List C = NULL;
+   List D = NULL;
    int i;
 
    for(i=1; i<=20; i++){
@@ -52,9 +53,17 @@ int main(int argc, char* argv[]){
    printf("%d\n", front(A));
    deleteBack(A);
    printf("%d\n", back(A));
+   
+   
+   printList(stdout,A);
+   printf("\n");
+   printList(stdout,B);
+   printf("\n");
+   D = concatList(A,B);
+   printList(stdout,D);
+   printf("\n");
    clear(A);
    printf("%d\n", length(A));
-   
 
    freeList(&A);
    freeList(&B);
@@ -77,6 +86,9 @@ true
 100
 2
 19
+2 3 4 5 -1 6 7 8 9 11 12 13 14 15 -2 16 17 18 19
+20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1
+2 3 4 5 -1 6 7 8 9 11 12 13 14 15 -2 16 17 18 19 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1
 0
 */
 
