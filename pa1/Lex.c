@@ -1,3 +1,10 @@
+//-----------------------------------------------------------------------------
+// Yahli Kijel
+// ykijel
+// 2023 Fall CSE101 PA1
+// List.c
+// Main function implementation
+//-----------------------------------------------------------------------------
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
