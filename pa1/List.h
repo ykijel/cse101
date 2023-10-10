@@ -2,7 +2,7 @@
 #define LIST_H
 #include <stdbool.h>
 
-#define FORMAT "%s"
+#define FORMAT "%d"
 
 typedef int* ListElement;
 typedef struct ListObj* List;
