@@ -201,7 +201,7 @@ void prepend(List L, int x)
 
 	L->front = newNode;
 	L->length++;
-    L->cursor_index++;
+	L->cursor_index++;
 }
 
 void append(List L, int x)
@@ -288,7 +288,7 @@ void deleteFront(List L)
 {
 	if(length(L) > 0)
 	{
-
+		Node temp = L->front;
 
 		if(L->front == L->cursor)
 		{
@@ -305,7 +305,7 @@ void deleteFront(List L)
 		else{
 			L->back = NULL;
 		}
-
+		free(temp);
 		L->length--;
 		if(L->cursor_index != -1)
 		{
@@ -324,6 +324,8 @@ void deleteBack(List L)
             L->cursor = L->cursor->prev;
             L->cursor_index=-1;
         }
+        
+        Node temp = L->back;
 
         if (L->length == 1)
         {
@@ -341,14 +343,15 @@ void deleteBack(List L)
             L->back = L->back->prev;
             L->back->next = NULL;
         }
-
+        free(temp);
         L->length--;
     }
 }
 
 void delete(List L) {
     if (length(L) > 0 && index(L) >= 0) {
-
+    	
+    	Node temp = L->cursor;
         if (L->cursor == L->front) {
             L->front = L->front->next;
             if (L->front != NULL) {
@@ -371,7 +374,8 @@ void delete(List L) {
         L->cursor = NULL;
         L->cursor_index = -1;
         L->length--;
-
+        
+        free(temp);
      
     }
 }
