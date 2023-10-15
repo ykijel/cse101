@@ -116,8 +116,14 @@ void makeNull(Graph G) {
 // Function to add an undirected edge between vertices 'u' and 'v'
 void addEdge(Graph G, int u, int v) {
     if (1 <= u && u <= getOrder(G) && 1 <= v && v <= getOrder(G)) {
-        append(G->adjLists[u], v);
-        append(G->adjLists[v], u);
+        // Sort the adjacency lists in sorted order
+        sortList(G->adjLists[u], v);
+        sortList(G->adjLists[v], u);
+
+        // Add the edges to the adjacency lists
+        //append(G->adjLists[u], v);
+        //append(G->adjLists[v], u);
+
         G->size--;
     }
 }
@@ -178,5 +184,19 @@ void printGraph(FILE* out, Graph G) {
             printList(out, G->adjLists[i]);
             fprintf(out, "\n");
         }
+    }
+}
+
+void sortList(List L, int x) {
+    moveFront(L);
+    
+    while (index(L) >= 0 && x > get(L)) {
+        moveNext(L);
+    }
+
+    if (index(L) >= 0) {
+        insertBefore(L, x);
+    } else {
+        append(L, x);
     }
 }
