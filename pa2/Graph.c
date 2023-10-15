@@ -140,6 +140,7 @@ void BFS(Graph G, int s) {
 	
     if (1 <= s && s <= getOrder(G)) {
         // Initialize data structures and set values for source vertex 's'
+        G->source = s;
         for (int x = 1; x <= G->order; x++) {
             if (x != s) {
                 G->color[x] = -1;    // -1 represents white (unvisited)
