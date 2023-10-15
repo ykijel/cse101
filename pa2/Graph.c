@@ -123,7 +123,7 @@ void addEdge(Graph G, int u, int v) {
         //append(G->adjLists[u], v);
         //append(G->adjLists[v], u);
 
-        G->size--;
+        G->size++;
     }
 }
 
