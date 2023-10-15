@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include "Graph.h"
 #include "List.h"
-#define INF -1
-#define NIL 0
 
 // Define the structure for a graph
 typedef struct GraphObj {

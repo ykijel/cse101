@@ -3,8 +3,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include "Graph.h"
-#define INF -1
-#define NIL 0
 
 // Helper function to print the shortest path from source to destination
 void printPath(FILE *out, Graph G, int source, int destination) {
