@@ -137,6 +137,7 @@ void addArc(Graph G, int u, int v) {
 
 // Function to perform Breadth-First Search (BFS) from source 's'
 void BFS(Graph G, int s) {
+	
     if (1 <= s && s <= getOrder(G)) {
         // Initialize data structures and set values for source vertex 's'
         for (int x = 1; x <= G->order; x++) {
@@ -171,7 +172,8 @@ void BFS(Graph G, int s) {
 
             G->color[x] = 1; // 1 represents black (explored)
         }
-
+        
+        
         freeList(&Q); // Free the memory used by the queue
     }
 }
