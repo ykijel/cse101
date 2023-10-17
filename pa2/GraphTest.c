@@ -1,24 +1,9 @@
 //-----------------------------------------------------------------------------
-//
+// Yahli Kijel
+// ykijel
+// 2023 Fall CSE101 PA2
 // GraphTest.c
-// 
-// This is a fancy test client that calculates the Radius and Diameter of 
-// the graph defined on lines 41-49, along with its Central and Peripheral 
-// vertices.  The definitions of these terms at:
-// 
-//    http://en.wikipedia.org/wiki/Distance_(graph_theory)
-// 
-// Place this file in a directory with copies of your List.c, List.h, Graph.c, 
-// Graph.h and an appropriate Makefile, then compile and run. The output 
-// is contained in the file GraphClientOut.
-// 
-// This program does not exercise all functions in your Graph ADT, but it 
-// does a pretty good job of testing BFS().  If your output differs from 
-// the above, you have a logical problem in either your Graph or List ADT.
-// 
-// Remember you are required to submit a file named GraphTest.c with pa4 that
-// exercises your Graph functions.  Do not submit this file.
-//
+// Tests for Graph ADT
 //-----------------------------------------------------------------------------
 #include<stdio.h>
 #include<stdlib.h>

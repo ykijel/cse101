@@ -5,7 +5,7 @@
 #  make GraphTest         	makes GraphTest
 #  make clean               removes binaries
 #  make checkFind           tests FindPath for memory leaks on in7
-#  make checkClient         tests GraphTest for memory leaks
+#  make checkTest           tests GraphTest for memory leaks
 #------------------------------------------------------------------------------
 
 BASE_SOURCES   = Graph.c List.c
@@ -37,5 +37,5 @@ clean :
 checkFind : FindPath
 	$(MEMCHECK) FindPath in7 junk7
 
-checkClient : GraphTest
+checkTest : GraphTest
 	$(MEMCHECK) GraphTest
