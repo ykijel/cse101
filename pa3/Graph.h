@@ -2,7 +2,7 @@
 #define GRAPH_H
 #include <stdbool.h>
 #include "List.h"
-#define INF -1
+#define UNDEF -1
 #define NIL 0
 
 typedef struct GraphObj* Graph;

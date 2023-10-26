@@ -91,8 +91,19 @@ int getFinish(Graph G, int u) {
 
 void addArc(Graph G, int u, int v) {
     if (1 <= u && u <= getOrder(G) && 1 <= v && v <= getOrder(G)) {
-        addArcHelper(G->adjLists[u], v);
-        G->size++;
+    	int edgeExists = 0;
+    	for (moveFront(G->adjLists[u]); index(G->adjLists[u]) >= 0; moveNext(G->adjLists[u])) {
+            if (get(G->adjLists[u]) == v) {
+                edgeExists = 1;
+                break;
+            }
+        }
+        if(!edgeExists)
+        {
+        	addArcHelper(G->adjLists[u], v);
+        	G->size++;
+        }
+        
     }
 }
 
