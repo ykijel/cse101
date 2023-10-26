@@ -37,5 +37,5 @@ clean :
 checkFind : FindComponents
 	$(MEMCHECK) FindComponents in8 junk8
 
-GraphTest : GraphTest
+checkTest : GraphTest
 	$(MEMCHECK) GraphTest

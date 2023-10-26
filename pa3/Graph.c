@@ -31,8 +31,8 @@ Graph newGraph(int n) {
         G->adjLists[i] = newList();
         G->color[i] = -1;    // -1 represents white (unvisited)
         G->parent[i] = NIL;  // NIL represents no parent
-        G->discover[i] = 0;
-        G->finish[i] = 0;
+        G->discover[i] = UNDEF;
+        G->finish[i] = UNDEF;
     }
 
     return G;
@@ -92,8 +92,21 @@ int getFinish(Graph G, int u) {
 // Function to add a directed edge from vertex 'u' to vertex 'v'
 void addArc(Graph G, int u, int v) {
     if (1 <= u && u <= getOrder(G) && 1 <= v && v <= getOrder(G)) {
-        append(G->adjLists[u], v);
-        G->size++;
+        List adjList = G->adjLists[u];
+        
+        // Check if the edge already exists
+        int edgeExists = 0;
+        for (moveFront(adjList); index(adjList) >= 0; moveNext(adjList)) {
+            if (get(adjList) == v) {
+                edgeExists = 1;
+                break;
+            }
+        }
+        
+        if (!edgeExists) {
+            append(adjList, v);
+            G->size++;
+        }
     }
 }
 
