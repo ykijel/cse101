@@ -100,7 +100,7 @@ void addArc(Graph G, int u, int v) {
         }
         if(!edgeExists)
         {
-        	addArcHelper(G->adjLists[u], v);
+        	addHelper(G->adjLists[u], v);
         	G->size++;
         }
         
@@ -110,9 +110,20 @@ void addArc(Graph G, int u, int v) {
 // Function to add an undirected edge between vertices 'u' and 'v'
 void addEdge(Graph G, int u, int v) {
     if (1 <= u && u <= getOrder(G) && 1 <= v && v <= getOrder(G)) {
-        append(G->adjLists[u], v);
-        append(G->adjLists[v], u);
-        G->size++;
+    	int edgeExists = 0;
+    	for (moveFront(G->adjLists[u]); index(G->adjLists[u]) >= 0; moveNext(G->adjLists[u])) {
+            if (get(G->adjLists[u]) == v) {
+                edgeExists = 1;
+                break;
+            }
+        }
+        if(!edgeExists)
+        {
+        	addHelper(G->adjLists[u], v);
+        	addHelper(G->adjLists[v], u);
+        	G->size++;
+        }
+        
     }
 }
 
@@ -202,7 +213,7 @@ void printGraph(FILE* out, Graph G) {
     }
 }
 
-void addArcHelper(List myList, int x)
+void addHelper(List myList, int x)
 {
         if (length(myList) == 0) {
             prepend(myList, x);
