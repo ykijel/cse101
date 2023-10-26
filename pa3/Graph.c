@@ -89,24 +89,10 @@ int getFinish(Graph G, int u) {
     return 0;
 }
 
-// Function to add a directed edge from vertex 'u' to vertex 'v'
 void addArc(Graph G, int u, int v) {
     if (1 <= u && u <= getOrder(G) && 1 <= v && v <= getOrder(G)) {
-        List adjList = G->adjLists[u];
-        
-        // Check if the edge already exists
-        int edgeExists = 0;
-        for (moveFront(adjList); index(adjList) >= 0; moveNext(adjList)) {
-            if (get(adjList) == v) {
-                edgeExists = 1;
-                break;
-            }
-        }
-        
-        if (!edgeExists) {
-            append(adjList, v);
-            G->size++;
-        }
+        addArcHelper(G->adjLists[u], v);
+        G->size++;
     }
 }
 
@@ -203,4 +189,29 @@ void printGraph(FILE* out, Graph G) {
             fprintf(out, "\n");
         }
     }
+}
+
+void addArcHelper(List myList, int x)
+{
+        if (length(myList) == 0) {
+            prepend(myList, x);
+        } else {
+            moveFront(myList);
+            int inserted = 0;
+
+            while (index(myList) >= 0) {
+            	
+                if (x < get(myList)) {
+                    insertBefore(myList, x);
+                    inserted = 1;
+                    break;
+                }
+                moveNext(myList);
+            }
+
+            // If the line was not inserted, insert it at the end
+            if (!inserted) {
+                append(myList, x);
+            }
+        }
 }
