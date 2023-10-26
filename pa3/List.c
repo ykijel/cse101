@@ -1,3 +1,11 @@
+//-----------------------------------------------------------------------------
+// Yahli Kijel
+// ykijel
+// 2023 Fall CSE101 PA3
+// List.c
+// List ADT implementation and functions
+//-----------------------------------------------------------------------------
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "List.h"
