@@ -254,6 +254,11 @@ Matrix sum(Matrix A, Matrix B) {
         fprintf(stderr, "Error: Matrices have different sizes.\n");
         exit(1);
     }
+    
+    if(equals(A, B))
+    {
+    	return scalarMult(2, A);
+    }
 
     Matrix C = newMatrix(size(A));
 
