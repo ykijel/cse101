@@ -20,6 +20,10 @@ typedef struct MatrixObj* Matrix;
 
 Entry* newEntry(int column, double value) {
     Entry* entry = (Entry*)malloc(sizeof(Entry));
+    if (entry == NULL) {
+        fprintf(stderr, "Error: Memory allocation failed.\n");
+        exit(1);
+    }
     entry->column = column;
     entry->value = value;
     return entry;
@@ -45,7 +49,8 @@ void freeMatrix(Matrix* pM) {
         Matrix M = *pM;
 
         for (int i = 1; i <= M->size; i++) {
-            freeList(&(M->rows[i]));
+            clear(M->rows[i]); // Clear the list, which also deallocates Entry objects
+            freeList(&(M->rows[i])); // Free the list itself
         }
 
         free(M->rows);
@@ -292,7 +297,7 @@ Matrix diff(Matrix A, Matrix B) {
     for (int i = 1; i <= size(A); i++) {
         List rowA = A->rows[i];
         List rowB = B->rows[i];
-        List rowD = newList();
+        List rowD = newList(); // Create a new list for rowD
         moveFront(rowA);
         moveFront(rowB);
 
@@ -303,19 +308,16 @@ Matrix diff(Matrix A, Matrix B) {
             if (entryA->column == entryB->column) {
                 double diffValue = entryA->value - entryB->value;
                 if (diffValue != 0.0) {
-                    // Append the entry to rowD only if the difference is non-zero
                     Entry* e = newEntry(entryA->column, diffValue);
                     append(rowD, e);
                 }
                 moveNext(rowA);
                 moveNext(rowB);
             } else if (entryA->column < entryB->column) {
-                // Append entryA to rowD
                 Entry* e = newEntry(entryA->column, entryA->value);
                 append(rowD, e);
                 moveNext(rowA);
             } else {
-                // Append entryB to rowD with a negated value
                 Entry* e = newEntry(entryB->column, -entryB->value);
                 append(rowD, e);
                 moveNext(rowB);
@@ -323,7 +325,6 @@ Matrix diff(Matrix A, Matrix B) {
         }
 
         while (index(rowA) >= 0) {
-            // Append any remaining entries from rowA
             Entry* entryA = (Entry*)get(rowA);
             Entry* e = newEntry(entryA->column, entryA->value);
             append(rowD, e);
@@ -331,14 +332,12 @@ Matrix diff(Matrix A, Matrix B) {
         }
 
         while (index(rowB) >= 0) {
-            // Append any remaining entries from rowB with negated values
             Entry* entryB = (Entry*)get(rowB);
             Entry* e = newEntry(entryB->column, -entryB->value);
             append(rowD, e);
             moveNext(rowB);
         }
 
-        // Update rowD for matrix D and the total non-zero count
         D->rows[i] = rowD;
         D->nnz += length(rowD);
     }
