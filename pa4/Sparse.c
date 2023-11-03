@@ -1,3 +1,11 @@
+//-----------------------------------------------------------------------------
+// Yahli Kijel
+// ykijel
+// 2023 Fall CSE101 PA4
+// Sparse.c
+// Main function implementation
+//-----------------------------------------------------------------------------
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "Matrix.h" // Include your Matrix ADT header

@@ -1,7 +1,11 @@
 //-----------------------------------------------------------------------------
-//  MatrixClient.c 
-//  A test client for the Matrix ADT
+// Yahli Kijel
+// ykijel
+// 2023 Fall CSE101 PA4
+// MatrixTest.c
+// Tests for Matrix ADT
 //-----------------------------------------------------------------------------
+
 #include<stdlib.h>
 #include<stdio.h>
 #include<stdbool.h>

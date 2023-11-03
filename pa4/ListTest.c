@@ -1,7 +1,11 @@
 //-----------------------------------------------------------------------------
+// Yahli Kijel
+// ykijel
+// 2023 Fall CSE101 PA4
 // ListTest.c
-// Test client for List ADT
+// Tests for List ADT
 //-----------------------------------------------------------------------------
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdbool.h>
