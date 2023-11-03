@@ -29,6 +29,12 @@ Entry* newEntry(int column, double value) {
     return entry;
 }
 
+void freeEntry(Entry* entry)
+{
+    free(entry);
+    entry = NULL;
+}
+
 // Create a newMatrix of size n
 Matrix newMatrix(int n) {
     Matrix M = malloc(sizeof(MatrixObj));
@@ -45,16 +51,21 @@ Matrix newMatrix(int n) {
 
 // Free the Matrix and its associated memory
 void freeMatrix(Matrix* pM) {
-    if (pM != NULL && *pM != NULL) {
-        Matrix M = *pM;
-
-        for (int i = 1; i <= M->size; i++) {
-            clear(M->rows[i]); // Clear the list, which also deallocates Entry objects
-            freeList(&(M->rows[i])); // Free the list itself
+    if(pM && *pM)
+    {
+        for(int i = 1; i <= (*pM)->size; i++)
+        {
+            moveFront((*pM)->rows[i]);
+            while(index((*pM)->rows[i]) >= 0)
+            {
+                Entry* E = (Entry*)get((*pM)->rows[i]);
+                freeEntry(E);
+                moveNext((*pM)->rows[i]);
+            }
+            freeList(&((*pM)->rows[i]));
         }
-
-        free(M->rows);
-        free(M);
+        free((*pM)->rows);
+        free(*pM);
         *pM = NULL;
     }
 }
@@ -79,8 +90,12 @@ int equals(Matrix A, Matrix B) {
 
         moveFront(rowA);
         moveFront(rowB);
+        if(length(rowA) != length(rowB))
+        {
+            return 0;
+        }
 
-        while (index(rowA) >= 0) {
+        while (index(rowA) >= 0 && index(rowB) >= 0) {
             Entry* entryA = (Entry*)get(rowA);
             Entry* entryB = (Entry*)get(rowB);
 
@@ -91,6 +106,7 @@ int equals(Matrix A, Matrix B) {
             moveNext(rowA);
             moveNext(rowB);
         }
+
     }
 
     return 1;
@@ -98,7 +114,15 @@ int equals(Matrix A, Matrix B) {
 
 void makeZero(Matrix M) {
     for (int i = 1; i <= size(M); i++) {
+        moveFront(M->rows[i]);
+        while(index((M)->rows[i]) >= 0)
+            {
+                Entry* E = (Entry*)get((M)->rows[i]);
+                freeEntry(E);
+                moveNext((M)->rows[i]);
+            }
         clear(M->rows[i]);
+
     }
     M->nnz = 0;
 }
@@ -214,69 +238,70 @@ Matrix scalarMult(double x, Matrix A) {
     return B;
 }
 
-List vectorSum(List P, List Q) {
-    List result = newList();
-    moveFront(P);
-    moveFront(Q);
-
-    while (index(P) >= 0 && index(Q) >= 0) {
-        Entry* entryP = (Entry*)get(P);
-        Entry* entryQ = (Entry*)get(Q);
-
-        if (entryP->column == entryQ->column) {
-            Entry* e = newEntry(entryP->column, entryP->value + entryQ->value);
-            append(result, e);
-            moveNext(P);
-            moveNext(Q);
-        } else if (entryP->column < entryQ->column) {
-            Entry* e = newEntry(entryP->column, entryP->value);
-            append(result, e);
-            moveNext(P);
-        } else {
-            Entry* e = newEntry(entryQ->column, entryQ->value);
-            append(result, e);
-            moveNext(Q);
-        }
-    }
-
-    while (index(P) >= 0) {
-        Entry* entryP = (Entry*)get(P);
-        append(result, newEntry(entryP->column, entryP->value));
-        moveNext(P);
-    }
-
-    while (index(Q) >= 0) {
-        Entry* entryQ = (Entry*)get(Q);
-        append(result, newEntry(entryQ->column, entryQ->value));
-        moveNext(Q);
-    }
-
-    return result;
-}
-
 Matrix sum(Matrix A, Matrix B) {
     if (size(A) != size(B)) {
         fprintf(stderr, "Error: Matrices have different sizes.\n");
         exit(1);
     }
-    
-    if(equals(A, B))
-    {
-    	return scalarMult(2, A);
+
+    // Check if A and B are equal
+    if (equals(A, B)) {
+        // Create and return a zero matrix of the same size as A
+        
+        return scalarMult(2, A);
     }
 
-    Matrix C = newMatrix(size(A));
+    Matrix D = newMatrix(size(A));
 
     for (int i = 1; i <= size(A); i++) {
         List rowA = A->rows[i];
         List rowB = B->rows[i];
-        List rowC = vectorSum(rowA, rowB); // Use the vectorSum helper function
+        List rowD = D->rows[i]; // Create a new list for rowD
+        moveFront(rowA);
+        moveFront(rowB);
 
-        C->rows[i] = rowC;
-        C->nnz += length(rowC);
+        while (index(rowA) >= 0 && index(rowB) >= 0) {
+            Entry* entryA = (Entry*)get(rowA);
+            Entry* entryB = (Entry*)get(rowB);
+
+            if (entryA->column == entryB->column) {
+                double diffValue = entryA->value + entryB->value;
+                if (diffValue != 0.0) {
+                    Entry* e = newEntry(entryA->column, diffValue);
+                    append(rowD, e);
+                }
+                moveNext(rowA);
+                moveNext(rowB);
+            } else if (entryA->column < entryB->column) {
+                Entry* e = newEntry(entryA->column, entryA->value);
+                append(rowD, e);
+                moveNext(rowA);
+            } else {
+                Entry* e = newEntry(entryB->column, -entryB->value);
+                append(rowD, e);
+                moveNext(rowB);
+            }
+        }
+
+        while (index(rowA) >= 0) {
+            Entry* entryA = (Entry*)get(rowA);
+            Entry* e = newEntry(entryA->column, entryA->value);
+            append(rowD, e);
+            moveNext(rowA);
+        }
+
+        while (index(rowB) >= 0) {
+            Entry* entryB = (Entry*)get(rowB);
+            Entry* e = newEntry(entryB->column, -entryB->value);
+            append(rowD, e);
+            moveNext(rowB);
+        }
+
+        //D->rows[i] = rowD;
+        D->nnz += length(rowD);
     }
 
-    return C;
+    return D;
 }
 
 Matrix diff(Matrix A, Matrix B) {
@@ -297,7 +322,7 @@ Matrix diff(Matrix A, Matrix B) {
     for (int i = 1; i <= size(A); i++) {
         List rowA = A->rows[i];
         List rowB = B->rows[i];
-        List rowD = newList(); // Create a new list for rowD
+        List rowD = D->rows[i]; // Create a new list for rowD
         moveFront(rowA);
         moveFront(rowB);
 
@@ -338,7 +363,7 @@ Matrix diff(Matrix A, Matrix B) {
             moveNext(rowB);
         }
 
-        D->rows[i] = rowD;
+        //D->rows[i] = rowD;
         D->nnz += length(rowD);
     }
 
