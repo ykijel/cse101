@@ -104,8 +104,9 @@ ListElement List::peekPrev() const {
 
 // Deletes all elements in this List, setting it to the empty state.
 void List::clear() {
+moveFront();
    while (num_elements > 0) {
-      eraseBefore();
+      eraseAfter();
    }
 }
 
