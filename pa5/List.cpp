@@ -309,48 +309,61 @@ int List::findPrev(ListElement x) {
 // is not moved with respect to the retained elements, i.e. it lies between 
 // the same two retained elements that it did before cleanup() was called.
 void List::cleanup() {
-   Node* tempBeforeCursor = beforeCursor;
-   Node* tempAfterCursor = afterCursor;
+    Node* tempBeforeCursor = beforeCursor;
+    Node* tempAfterCursor = afterCursor;
 
-   Node* current = frontDummy->next;
-   while (current != nullptr) {
-      ListElement currentData = current->data;
-      Node* runner = current->next;
+    Node* current = frontDummy->next;
 
-      while (runner != nullptr) {
-         if (runner->data == currentData) {
-            // Duplicate found, remove it
-            Node* temp = runner;
-            runner = runner->next;
+    while (current != nullptr) {
+        ListElement currentData = current->data;
+        Node* runner = current->next;
+        while (runner != nullptr) {
+            if (runner->data == currentData) {
+                // Duplicate found, remove it
+                Node* temp = runner;
+                runner = runner->next;
 
-            // Update pointers to bypass the duplicate node
-            temp->prev->next = runner;
-            if (runner != nullptr) {
-               runner->prev = temp->prev;
+                // Update pointers to bypass the duplicate node
+                temp->prev->next = runner;
+                if (runner != nullptr) {
+                    runner->prev = temp->prev;
+                } else {
+                    // If runner is null, update backDummy->prev
+                    backDummy->prev = temp->prev;
+                }
+
+                delete temp;  // Free the memory of the removed node
+                num_elements--;
+
+                // If cursor is after the removed node, adjust cursor position
+                if (tempAfterCursor == temp) {
+                    tempAfterCursor = runner;
+                } else if (tempBeforeCursor == temp) {
+                    tempBeforeCursor = temp->prev;
+                } else if (pos_cursor > 0 && pos_cursor <= num_elements) {
+                
+                    pos_cursor--;
+                }
             } else {
-               // If runner is null, update backDummy->prev
-               backDummy->prev = temp->prev;
+                // No duplicate, move to the next node
+                runner = runner->next;
             }
+        }
 
-            delete temp;  // Free the memory of the removed node
-            num_elements--;
-         } else {
-            // No duplicate, move to the next node
-            runner = runner->next;
-         }
-      }
+        // Move to the next node
+        current = current->next;
+    }
 
-      // Move to the next node
-      current = current->next;
-   }
-
-   // Restore the cursor to its original position
-   beforeCursor = tempBeforeCursor;
-   afterCursor = tempAfterCursor;
-   if (num_elements < pos_cursor) {
-      pos_cursor = num_elements;
-   }
+    // Restore the cursor to its original position
+    beforeCursor = tempBeforeCursor;
+    afterCursor = tempAfterCursor;
+    if (num_elements < pos_cursor) {
+    	
+        pos_cursor = num_elements;
+    }
 }
+
+
 
 // Returns a new List consisting of the elements of this List, followed by
 // the elements of L. The cursor in the returned List will be at position 0.
@@ -436,14 +449,45 @@ List& List::operator=(const List& L) {
         // Copy elements from L
         Node* temp = L.frontDummy->next;
         while (temp != nullptr) {
-            insertAfter(temp->data);
+            insertBefore(temp->data);
             temp = temp->next;
         }
 
-        // Set the cursor and position
+        // Set the cursor and position based on the new list
         beforeCursor = frontDummy;
         afterCursor = (num_elements > 0) ? frontDummy->next : nullptr;
         pos_cursor = 0;
+
+        // If L had a cursor, update it in the new list
+        if (L.beforeCursor != nullptr && L.afterCursor != nullptr) {
+            // Find the corresponding nodes in the new list
+            Node* cursorNode = frontDummy->next;
+            Node* tempCursorNode = L.beforeCursor->next;
+
+            while (tempCursorNode != nullptr) {
+                if (tempCursorNode == L.afterCursor) {
+                    afterCursor = cursorNode;
+                    break;
+                }
+
+                cursorNode = cursorNode->next;
+                tempCursorNode = tempCursorNode->next;
+            }
+
+            // If the cursor is within the new list, set it
+            if (cursorNode != nullptr && cursorNode != afterCursor) {
+                beforeCursor = cursorNode->prev;
+                pos_cursor = 0;
+                while (cursorNode != nullptr && cursorNode != afterCursor) {
+                    pos_cursor++;
+                    cursorNode = cursorNode->next;
+                }
+            }
+        } else {
+            // If L didn't have a cursor, set the cursor to nullptr
+            beforeCursor = nullptr;
+            afterCursor = nullptr;
+        }
     }
     return *this;
 }
