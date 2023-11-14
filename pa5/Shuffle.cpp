@@ -1,3 +1,11 @@
+//-----------------------------------------------------------------------------
+// Yahli Kijel
+// ykijel
+// 2023 Fall CSE101 PA5
+// Shuffle.cpp
+// Contains the main function that utilizes the List ADT
+//-----------------------------------------------------------------------------
+
 #include "List.h"
 #include <iostream>
 

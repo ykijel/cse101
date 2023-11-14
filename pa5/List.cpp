@@ -1,5 +1,10 @@
+//-----------------------------------------------------------------------------
+// Yahli Kijel
+// ykijel
+// 2023 Fall CSE101 PA5
 // List.cpp
-// Implementation file for List ADT.
+// List ADT implementation and functions
+//-----------------------------------------------------------------------------
 
 #include "List.h"
 #include <cstdio>
