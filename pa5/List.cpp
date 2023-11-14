@@ -39,7 +39,7 @@ List::List(const List& L) {
 
     // Copy elements from L
     Node* temp = L.frontDummy->next;
-    while (temp != nullptr) {
+    while (temp != nullptr && L.length() != 0) {
         insertBefore(temp->data);  // Insert at the front of the new list
         temp = temp->next;
     }
