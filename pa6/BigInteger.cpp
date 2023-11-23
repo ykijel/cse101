@@ -12,7 +12,7 @@
 #include <cstdio>
 #include <vector>
 
-const int power = 9;
+const int POWER = 9;
 const ListElement base = 1000000000;
 
 // negateList()
@@ -131,9 +131,9 @@ BigInteger::BigInteger(std::string s) : signum(0), digits() {
     }
 
     // Handle the case where the length is not a multiple of power
-    if (templength % power != 0) {
+    if (templength % POWER != 0) {
         std::string temp;
-        for (; i < templength % power; i++) {
+        for (; i < templength % POWER; i++) {
             temp += s[i];
         }
 
@@ -142,7 +142,7 @@ BigInteger::BigInteger(std::string s) : signum(0), digits() {
 
     while (i < templength) {
         std::string temp;
-        for (int j = 0; j < power && i < templength; j++, i++) {
+        for (int j = 0; j < POWER && i < templength; j++, i++) {
             temp += s[i];
         }
 
@@ -481,7 +481,7 @@ std::string BigInteger::to_string() {
         std::string paddingZeros = "";
 
         // Append trailing zeros based on the power
-        for (; paddingZeros.length() + digitStr.length() < power && digits.position() > 0; paddingZeros += '0') {}
+        for (; paddingZeros.length() + digitStr.length() < POWER && digits.position() > 0; paddingZeros += '0') {}
 
         result += paddingZeros + digitStr;
     }
