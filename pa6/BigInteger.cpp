@@ -1,4 +1,10 @@
-// BigInteger.cpp
+//-----------------------------------------------------------------------------
+//  Yahli Kijel
+//  ykijel
+//  2023 Fall CSE101 PA6
+//  BigInteger.cpp 
+//  BigInteger ADT implementation and functions
+//-----------------------------------------------------------------------------
 #include "BigInteger.h"
 #include <stdexcept>
 #include<iostream>

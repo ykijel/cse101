@@ -1,3 +1,10 @@
+//-----------------------------------------------------------------------------
+//  Yahli Kijel
+//  ykijel
+//  2023 Fall CSE101 PA6
+//  Arithmetic.cpp 
+//  Contains the main function that utilizes the BigInteger ADT
+//-----------------------------------------------------------------------------
 #include <iostream>
 #include <fstream>
 #include "BigInteger.h"  // Include your BigInteger implementation file

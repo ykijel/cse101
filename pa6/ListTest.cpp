@@ -1,7 +1,11 @@
 //-----------------------------------------------------------------------------
+// Yahli Kijel
+// ykijel
+// 2023 Fall CSE101 PA6
 // ListTest.cpp
-// A test client for List ADT
+// List ADT test file
 //-----------------------------------------------------------------------------
+
 #include<iostream>
 #include<string>
 #include<stdexcept>
